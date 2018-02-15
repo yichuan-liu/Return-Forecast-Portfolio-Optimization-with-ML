@@ -1,7 +1,10 @@
-# MISCELLANEOUS HELPER FUNCTIONS FOR EXPERTS
 # Miscellaneous helper functions for experts
 
-expWeights <- function(now, experts, brate=12, parms=list(wn="iwt", bn="bdex", pn="perf"))
+expertReset <- function() {
+  suppressWarnings(rm(list=c(P_EXPDB,P_EXPNF), envir = globalenv()))
+}
+
+expertWeights <- function(now, experts, brate=12, wn="iwt", bn="bdex", pn="perf")
 {
   # Compute expert weight(s) for one or many experts
   #
@@ -22,7 +25,8 @@ expWeights <- function(now, experts, brate=12, parms=list(wn="iwt", bn="bdex", p
   perf = experts[,pn]
   # Next expert's birthdays
   ndex = bdex + brate
-  # Weights: if just born
+  # Weights: 0 if just born or not yet born; otherwise use formula
   suppressWarnings(ifelse(now<=bdex, 0, iwt * pmin( (now-bdex)/(ndex-bdex), 1) * exp(perf/sqrt(now - bdex))))
 }
 
+# expertWeights(now, z_expnf)

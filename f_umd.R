@@ -20,7 +20,7 @@ umd <- function(now, fp=1:11, hp=1, rdb=NULL, idn=P_IDN, cpn=P_CPN, prn=P_PRN) {
   # Get the past time indexes
   pdex <- rev(now - fp)
   # Get the cumulative past returns
-  cum.ret <- cumReturns(pdex, rdb = rdb)
+  cum.ret <- getReturns(pdex, rdb = rdb, cum = T, gm = T)
   
   # Remove stocks with (1) price less than $1 (2) no cap
   # Critical: caps and prices are taken at time now

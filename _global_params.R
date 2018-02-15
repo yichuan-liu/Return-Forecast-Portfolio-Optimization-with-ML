@@ -39,3 +39,14 @@ lockBinding("P_FFDB", globalenv())
 # Name for the financial ratio data set
 P_FRDB <- "fr"
 lockBinding("P_FRDB", globalenv())
+
+# Name for the experts data set
+P_EXPDB <- "z_exp"
+lockBinding("P_EXPDB", globalenv())
+
+# Name for the experts information data set
+P_EXPNF <- "z_expnf"
+lockBinding("P_EXPNF", globalenv())
+
+# Performance decay parameter (not locked)
+P_LAMBDA <- 0.95
