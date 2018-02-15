@@ -1,6 +1,22 @@
 # Main Program
 
-# Clean up the global environment
+# Sources ----
+source("f_misc.R")
+source("f_getReturns.R")
+source("f_expertAdd.R")
+source("f_expertManage.R")
+source("f_expertRFPredict.R")
+source("f_expertRFTrain.R")
+source("f_experts_misc.R")
+source("f_freg.R")
+source("f_pfRank.R")
+source("f_pfReturns.R")
+source("f_ranktoweights.R")
+source("f_timer.R")
+source("f_track.R")
+source("f_umd.R")
+
+# Clean up the global environment ----
 clean()
 
 # General Parameters ----
@@ -67,3 +83,4 @@ for (now in timeline) {
 
 # Clean up
 rm(rdb)
+clean()
