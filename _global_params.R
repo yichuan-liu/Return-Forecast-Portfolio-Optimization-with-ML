@@ -59,7 +59,7 @@ P_LAMBDA <- 0.95
 P_EXPLF <- 240
 
 # Expert birth rate (one set of experts every x time periods)
-P_EXPBR <- 6
+P_EXPBR <- 1
 
 # NUMBER OF TREES PER RANDOM FOREST
 P_RFNTR <- 150
