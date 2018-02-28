@@ -15,9 +15,7 @@ Instructions:
 - Run the main program (_main.R).
 - Function definitions are in f_functionname.R files.
 
-Current model performance (1970-2015)
-                       OLS-based portfolio     "Smart" portfolio     "Smarter" portfolio
-Mean (mo.)	                0.0074                    0.0099                  0.0126
-Std Dev (mo.)	              0.0355                    0.0393                  0.0385
-Sharpe Ratio (mo.)	        0.2080                    0.2514                  0.3274
-Sharpe Ratio (an.)	        0.7205                    0.8709                  1.1342
+Current model performance (1970-2015) in terms of annualized Sharpe ratio:
+- OLS-based portfolio:	0.7205
+- RF-based portfolio:	0.8709
+- RF+tweaks portfolio:	1.1342
