@@ -1,12 +1,26 @@
 # Miscellaneous helper functions for experts
+# expertReset: resets the expert database
+# expertWeights: computes expert weights
 
-expertReset <- function() {
-  suppressWarnings(rm(list=c(P_EXPDB,P_EXPNF), envir = globalenv()))
+expertCount <- function() {
+  # Counts the number of experts
+  # Args:
+  #   None
+  #
+  # Returns:
+  #   Number of experts
+  
+  return(0)
 }
 
-expertWeights <- function(now, experts, brate=12, wn="iwt", bn="bdex", pn="perf")
+expertReset <- function() {
+  # Resets the expert database
+  suppressWarnings(rm(list=c("expdb","expnf"), envir = globalenv()))
+}
+
+expertWeights <- function(now, experts, brate=P_EXPBR, wn="iwt", bn="bdex", pn="perf")
 {
-  # Compute expert weight(s) for one or many experts
+  # Computes expert weight(s) for one or many experts
   #
   # Args:
   #   now: the time variable representing the current period
@@ -26,7 +40,11 @@ expertWeights <- function(now, experts, brate=12, wn="iwt", bn="bdex", pn="perf"
   # Next expert's birthdays
   ndex = bdex + brate
   # Weights: 0 if just born or not yet born; otherwise use formula
-  suppressWarnings(ifelse(now<=bdex, 0, iwt * pmin( (now-bdex)/(ndex-bdex), 1) * exp(perf/sqrt(now - bdex))))
+  # suppressWarnings(ifelse(now<=bdex, 0, iwt * pmin( (now-bdex)/(ndex-bdex), 1) * exp(50* perf/sqrt(now - bdex))))
+  
+  # NO RAMP
+  suppressWarnings(ifelse(now<=bdex, 0, iwt * exp(150* perf/sqrt(now - bdex))))
+  # suppressWarnings(ifelse(now<=bdex, 0, exp(perf)))
 }
 
 # expertWeights(now, z_expnf)

@@ -1,3 +1,5 @@
+source('f_pfReturns.R')
+
 umd <- function(now, fp=1:11, hp=1, rdb=NULL, idn=P_IDN, cpn=P_CPN, prn=P_PRN) {
   # Computes momentum (UMD) return for a given period
   #
@@ -28,21 +30,26 @@ umd <- function(now, fp=1:11, hp=1, rdb=NULL, idn=P_IDN, cpn=P_CPN, prn=P_PRN) {
   m2 <- m1[!is.na(m1$cap) & m1$prc>=1, c(idn, "cret", cpn)]
   
   # Get portfolio weights
-  m2[,"rank"] <- rank(m2[,"cret"])
-  m3 <- rankToWeights(m2, name="umd")
+  m2[,"umd"] <- m2[,"cret"]
+  m3 <- pfRank(m2[,c(idn, "umd")], caps = m2[,cpn], ew = F)
   # print(colMeans(m3[,-1]))
   # print(head(m3))
   
   # Compute long-short portfolio returns
-  weights <- m3[,c(idn,"umd.ew","umd.vw")]
-  rets <- pfReturns(weights, now+hp, rdb = rdb)
+  # weights <- m3[,c(idn,"umd.ew","umd.vw")]
+  rets <- pfReturns(m3, now+hp, rdb = rdb)
   
   return(rets)
   
 }
 
-# weights <- umd(500)
-umd.rets <- umd(500)
-print(umd.rets)
-# head(weights)
-rm(umd.rets)
+# print(umd(864))
+# pt <- proc.time()
+# print(umd(1395))
+# print((proc.time()-pt)[1])
+# 
+# # weights <- umd(500)
+# umd.rets <- umd(500)
+# print(umd.rets)
+# # head(weights)
+# rm(umd.rets)

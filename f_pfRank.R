@@ -21,14 +21,16 @@ pfRank <- function(df, pct=0.3, sep=F, caps=NULL, ew=T) {
   # If the first column is IDs
   if(names(df)[1] == P_IDN) {
     weights <- as.data.frame(df[,1])
-    df <- df[,-1]
+    names(weights) <- P_IDN
   } else {
     weights <- as.data.frame(1:dim(df)[1])
+    names(weights) <- P_IDN
+    df <- cbind(weights, df)
   }
-  names(weights) <- P_IDN
+  
   
   # Percentile Rank
-  for(vcol in 1:dim(df)[2]) {
+  for(vcol in 2:dim(df)[2]) {
     # Variable name
     name <- names(df)[vcol]
     # Quantile ranks
@@ -38,13 +40,12 @@ pfRank <- function(df, pct=0.3, sep=F, caps=NULL, ew=T) {
     # Up/down dummies
     d.up <- (qtl>(1-pct)) * 1
     d.dn <- (qtl<=pct) * 1
-    # Equal weights
-    if(ew) weights[,paste0(name,".ew")] <- d.up/sum(d.up) - d.dn/sum(d.dn)
     # Value weights
     if (!is.null(caps)) {
       weights[,paste0(name)] <- d.up*caps/sum(d.up*caps) - d.dn*caps/sum(d.dn*caps)
     }
-    
+    # Equal weights
+    if(ew) weights[,paste0(name,".ew")] <- d.up/sum(d.up) - d.dn/sum(d.dn)
   }
   
   return(weights)

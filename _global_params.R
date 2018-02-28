@@ -1,5 +1,12 @@
+# Defines the global parameters
+# 
+# Run this file FIRST, before all others
+#
+
+
 # Remove all parameters to reset them
 rm(list=ls(pos = ".GlobalEnv", pattern="P_"), pos = ".GlobalEnv")
+
 # Column name for IDs
 P_IDN <- "permno"
 lockBinding("P_IDN", globalenv())
@@ -40,13 +47,22 @@ lockBinding("P_FFDB", globalenv())
 P_FRDB <- "fr"
 lockBinding("P_FRDB", globalenv())
 
-# Name for the experts data set
-P_EXPDB <- "z_exp"
-lockBinding("P_EXPDB", globalenv())
-
-# Name for the experts information data set
-P_EXPNF <- "z_expnf"
-lockBinding("P_EXPNF", globalenv())
+# Path of the log file
+P_LOGFILE <- "log.txt"
+lockBinding("P_LOGFILE", globalenv())
 
 # Performance decay parameter (not locked)
+# LAMBDA = weight on current performance (return); (1-LAMBDA) = weight for past performance
 P_LAMBDA <- 0.95
+
+# Expert Lifespan in time periods (not locked)
+P_EXPLF <- 240
+
+# Expert birth rate (one set of experts every x time periods)
+P_EXPBR <- 6
+
+# NUMBER OF TREES PER RANDOM FOREST
+P_RFNTR <- 150
+
+# PERCENT OF CROSS-SECTION CHOSEN INTO L-S PORTFOLIOS
+P_PFPCT <- 0.3 # Long 30% & Short 30%

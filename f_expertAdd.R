@@ -1,5 +1,5 @@
 expertAdd <- function(now, models) {
-  # Adds one or more experts
+  # Adds one or more experts to expdb and expnf in the global environment
   #
   # Args:
   #   now: the time index now (used to set birthdates)
@@ -10,15 +10,13 @@ expertAdd <- function(now, models) {
   
   # Compute the average of existing weights, next available expert ID
   # and next available position in the expert database
-  if(exists(P_EXPDB, globalenv())) {
-    expdb <- get(P_EXPDB)
-    expnf <- get(P_EXPNF)
+  if(exists("expdb", globalenv()) && exists("expnf", globalenv())) {
     avg.wt <- mean(expnf[,"w"])
     nxt.id <- max(expnf[,"eid"])+1
     nxt.loc <- length(expdb)+1
   } else {
-    expdb <- NULL
-    expnf <- NULL
+    expdb <<- list()
+    expnf <<- NULL
     avg.wt <- 1
     nxt.id <- 1
     nxt.loc <- 1
@@ -32,20 +30,17 @@ expertAdd <- function(now, models) {
   
   # Add experts
   for(e in 1:exp.cnt) {
-    new.info <- rbind(new.info, c(nxt.id, now, nxt.loc, avg.wt, 0, avg.wt) )
-    expdb[nxt.loc] <- models[e]
+    note("expertAdd: adding expert (# =", nxt.id, "t =", now, "w0 =", avg.wt, "m =", class(models[[e]]), ")", lvl=1)
+    new.info <- rbind(new.info, c(nxt.id, e, now, nxt.loc, avg.wt, 0, avg.wt) )
+    expdb[nxt.loc] <<- models[e]
     nxt.loc <- nxt.loc + 1
     nxt.id <- nxt.id + 1
   }
   
   # Append new information
   new.info <- as.data.frame(new.info)
-  names(new.info) <- c("eid", "bdex", "loc", "iwt", "perf", "w")
-  expnf <- rbind(expnf, new.info)
-  
-  # Save the database globally
-  assign(P_EXPDB, expdb, globalenv())
-  assign(P_EXPNF, expnf, globalenv())
+  names(new.info) <- c("eid", "type", "bdex", "loc", "iwt", "perf", "w")
+  expnf <<- rbind(expnf, new.info)
   
 }
 

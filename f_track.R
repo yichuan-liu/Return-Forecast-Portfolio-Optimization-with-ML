@@ -19,9 +19,9 @@ track <- function(dbn, x, r=T, prefix="z_") {
   
   
   if(r) {
-    assign(dbn, rbind(get(dbn, globalenv()), x), envir = globalenv())
+    assign(dbn, rbind.data.frame(get(dbn, globalenv()), x), envir = globalenv())
   } else {
-    assign(dbn, cbind(get(dbn, globalenv()), x), envir = globalenv())
+    assign(dbn, cbind.data.frame(get(dbn, globalenv()), x), envir = globalenv())
   }
   
 }
