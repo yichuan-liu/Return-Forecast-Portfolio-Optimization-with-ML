@@ -1,13 +1,5 @@
 # Main Program
 
-
-# Initialization ----
-clean()
-
-# Program controls
-do.umd <- F # produces momentum portfolio returns simultaneously if true
-verbose <- T # shows progress in console if true
-
 # Sources
 source("_global_params.R") # Global parameters
 source("f_misc.R") # Miscellaneous helper functions
@@ -25,6 +17,13 @@ source("f_umd.R") # Function that computes momentum-like portfolio returns
 source("f_trackStocks.R") # Functions that track performance of expert prediction on individual stocks
 source("f_note.R") # Function that writes debug information to the log file
 source("f_timer.R") # FUnction that time code segments
+
+# Initialization ----
+clean()
+
+# Program controls
+do.umd <- F # produces momentum portfolio returns simultaneously if true
+verbose <- T # shows progress in console if true
 
 # UMD return tracker
 if (do.umd) resetTracker("umd")
