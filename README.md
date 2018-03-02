@@ -10,6 +10,11 @@ Data Requirement:
 - FF return data set: dateff, rf, mktrf, smb, hml, umd
 - WRDS financial ratio data set: permno, public_date, ... (any number of financial/accounting ratios)
 
+Package Requirement:
+- randomForest
+- strip
+- tidyr
+
 Instructions:
 - Run the data initialization script (_init.R) to load and format data sets. Change parameters (incl. paths) as needed.
 - Run the main program (_main.R).
