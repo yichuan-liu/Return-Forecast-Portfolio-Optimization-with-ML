@@ -22,9 +22,9 @@ Instructions:
 - Run the main program (_main.R).
 - Function definitions are in f_functionname.R files.
 
-Current model performance on only the largest 1,000 US stocks:
+Current model performance, with portfolios containing only the largest 1,000 US stocks:
 
 (all numbers are annualized L-S portfolio Sharpe ratios, 1972-2015)
-- simple RF model ensemble + H30%-L30% weights:	0.58
-- simple RF model ensemble + linear sector-neutral weights: 1.63
-- simple RF model ensemble + linear sector-neutral weights + gradient-descent-style adjustments: 2.94
+- RF model ensemble + H30%-L30% weights:	0.58
+- RF model ensemble + linear sector-neutral weights: 1.63
+- RF model ensemble + linear sector-neutral weights + gradient-descent-style adjustments: 2.94
