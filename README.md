@@ -1,9 +1,11 @@
-# "Smart" Portfolios
+# Return Forecast & Portfolio Formation using Machine Learning Techniques
 
 Predicting monthly stock returns with a performance-weighted ensemble of random forest models
++ Gradient descent style adjustments to portfolio weight
 + Additional tweaks to weights based on prediction history of individual stocks
 
-The eventual goal is to create an unsupervised program that can discover signals, optimize portfolio weights, evaluate performance and make real-time adjustments. 
+The resulting long-short portfolio vastly outperforms portfolios based on traditional linear models.
+(The eventual goal is to create an unsupervised program that can discover signals, optimize portfolio weights, evaluate performance and make real-time adjustments.)
 
 Data Requirement:
 - CRSP monthly return data set: date, PERMNO, PRC, SHROUT, RET, DLRET
@@ -11,8 +13,7 @@ Data Requirement:
 - WRDS financial ratio data set: permno, public_date, ... (any number of financial/accounting ratios)
 
 Package Requirement:
-- randomForest
-- strip
+- ranger (randomForest but much faster)
 - tidyr
 
 Instructions:
@@ -20,7 +21,8 @@ Instructions:
 - Run the main program (_main.R).
 - Function definitions are in f_functionname.R files.
 
-Current model performance (1970-2015) in terms of annualized Sharpe ratio:
-- OLS-based portfolio:	0.7205
-- RF-based portfolio:	0.8709
-- RF+tweaks portfolio:	1.1342
+Current model performance on only the largest 1,000 US stocks:
+(all numbers are annualized L-S portfolio Sharpe ratios, 1972-2015)
+- simple RF model ensemble + H30%-L30% weights:	0.58
+- simple RF model ensemble + linear sector-neutral weights: 1.63
+- simple RF model ensemble + linear sector-neutral weights + gradient-descent-style adjustments: 2.94
