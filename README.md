@@ -5,6 +5,7 @@ Predicting monthly stock returns with a performance-weighted ensemble of random 
 + Additional tweaks to weights based on prediction history of individual stocks
 
 The resulting long-short portfolio vastly outperforms portfolios based on traditional linear models.
+
 (The eventual goal is to create an unsupervised program that can discover signals, optimize portfolio weights, evaluate performance and make real-time adjustments.)
 
 Data Requirement:
