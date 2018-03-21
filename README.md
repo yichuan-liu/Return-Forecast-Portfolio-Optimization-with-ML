@@ -1,8 +1,8 @@
 # Return Forecast & Portfolio Formation using Machine Learning Techniques
 
 Predicting monthly stock returns with a performance-weighted ensemble of random forest models
-+ Gradient descent style adjustments to portfolio weights
-+ Additional tweaks to weights based on prediction history of individual stocks
+- \+ Gradient descent style adjustments to portfolio weights
+- \+ Additional tweaks to weights based on prediction history of individual stocks
 
 The resulting long-short portfolio vastly outperforms portfolios based on traditional linear models.
 
