@@ -22,6 +22,7 @@ Instructions:
 - Function definitions are in f_functionname.R files.
 
 Current model performance on only the largest 1,000 US stocks:
+
 (all numbers are annualized L-S portfolio Sharpe ratios, 1972-2015)
 - simple RF model ensemble + H30%-L30% weights:	0.58
 - simple RF model ensemble + linear sector-neutral weights: 1.63
