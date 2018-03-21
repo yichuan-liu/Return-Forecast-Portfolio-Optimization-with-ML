@@ -43,7 +43,7 @@ expertWeights <- function(now, experts, brate=P_EXPBR, wn="iwt", bn="bdex", pn="
   # suppressWarnings(ifelse(now<=bdex, 0, iwt * pmin( (now-bdex)/(ndex-bdex), 1) * exp(50* perf/sqrt(now - bdex))))
   
   # NO RAMP
-  suppressWarnings(ifelse(now<=bdex, 0, iwt * exp(150* perf/sqrt(now - bdex))))
+  suppressWarnings(ifelse(now<=bdex, 0, iwt * exp(10* perf/sqrt(now - bdex))))
   # suppressWarnings(ifelse(now<=bdex, 0, exp(perf)))
 }
 

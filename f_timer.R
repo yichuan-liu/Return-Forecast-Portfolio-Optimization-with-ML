@@ -1,20 +1,19 @@
-tm <- function(s=T)
+tm <- function(s = T)
 {
   # Starts/stops timer
   #
   # Args:
   #   s: start timer if true; stop otherwise
-  #   v: print the results in console if true
   #
   # Returns:
-  #   Elapsed time if s=F (stops)
+  #   Elapsed time if s = F (stops)
   
   if(s) {
-    timer <<- proc.time()
+    timer <<- Sys.time()
     return()
   }
   
-  elapsed <- as.numeric((proc.time()-timer)[1])
+  elapsed <- as.numeric(Sys.time() - timer)
   return(elapsed)
 }
 

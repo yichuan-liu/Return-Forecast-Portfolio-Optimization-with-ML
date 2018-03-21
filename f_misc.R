@@ -24,7 +24,7 @@ clean <- function() {
   # - All parameters with prefix P_
   # - All tracked results with prefix z_
   # - All essential data sets: P_RETDB, P_FFDB, P_FRDB
-  keep = c(P_RETDB, P_FFDB, P_FRDB)
+  keep = c(P_RETDB, P_FFDB, P_FRDB, P_FRDB2)
   delete = setdiff(ls(pos = ".GlobalEnv"), c(lsf.str(pos = ".GlobalEnv"), keep, 
                                              ls(pos = ".GlobalEnv", pattern="z_"),
                                              ls(pos = ".GlobalEnv", pattern="P_")))

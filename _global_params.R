@@ -27,6 +27,10 @@ lockBinding("P_RTN", globalenv())
 P_PRN <- "prc"
 lockBinding("P_PRN", globalenv())
 
+# Column name for SIC code
+P_SCN <- "sic"
+lockBinding("P_SCN", globalenv())
+
 # Column name for rank
 P_RKN <- "rank"
 lockBinding("P_RKN", globalenv())
@@ -47,22 +51,29 @@ lockBinding("P_FFDB", globalenv())
 P_FRDB <- "fr"
 lockBinding("P_FRDB", globalenv())
 
+# Name for the second financial ratio data set
+P_FRDB2 <- "qq"
+lockBinding("P_FRDB2", globalenv())
+
 # Path of the log file
 P_LOGFILE <- "log.txt"
 lockBinding("P_LOGFILE", globalenv())
 
 # Performance decay parameter (not locked)
 # LAMBDA = weight on current performance (return); (1-LAMBDA) = weight for past performance
-P_LAMBDA <- 0.95
+P_LAMBDA <- 0.90
 
 # Expert Lifespan in time periods (not locked)
-P_EXPLF <- 240
+P_EXPLF <- 120
 
 # Expert birth rate (one set of experts every x time periods)
 P_EXPBR <- 1
 
-# NUMBER OF TREES PER RANDOM FOREST
-P_RFNTR <- 150
+# NUMBER OF TREES PER RANDOM FOREST (FIRST PASS)
+P_RFNTR <- 300
 
-# PERCENT OF CROSS-SECTION CHOSEN INTO L-S PORTFOLIOS
+# NUMBER OF TREES PER RANDOM FOREST (SECOND PASS)
+P_RFNTR2 <- 300
+
+# "TYPICAL" PERCENT OF ASSETS CHOSEN INTO L-S PORTFOLIOS
 P_PFPCT <- 0.3 # Long 30% & Short 30%
