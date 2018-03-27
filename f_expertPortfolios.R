@@ -139,6 +139,11 @@ expertPortfolios <- function(now, preds, exp.wts = NULL, rdb = NULL,
   # Remove the cap column
   preds[, cpn] <- NULL
   
+  # Compute deviations from the median ----
+  
+  # for (col in 2:(dim(preds)[2])) {
+  #   preds[, col] <- preds[, col] - median(preds[, col], na.rm = T)
+  # }
   
   # Additional Sorting Variables ----
   
@@ -165,21 +170,56 @@ expertPortfolios <- function(now, preds, exp.wts = NULL, rdb = NULL,
   weights <- weights[order(weights[, idn]), ]
   
   # Add sector-neutral linear weights on mean/variance ratios
-  avg.sec <- preds[, c(idn, scn, "exp")]
-  avg.sec[, "exp"] <- avg.sec[, "exp"] / rowVars(preds[,2:(exp.cnt+1)])
-  weights[, "expl0"] <- sectorNeuralWeights(avg.sec[,c(idn, scn, "exp")], svn = "exp")
+  # avg.sec <- preds[, c(idn, scn, "exp")]
+  # avg.sec[, "exp"] <- avg.sec[, "exp"] / rowVars(preds[,2:(exp.cnt+1)])
+  # weights[, "expl0"] <- sectorNeuralWeights(avg.sec[,c(idn, scn, "exp")], svn = "exp")
+  
+  # evu <- sum(solve(rv) %*% re)
+  # eve <- sum(solve(rv))
+  # w0 <- solve(rv) %*% (re - evu/eve)
+  # sr0 <- sharpe(w0, re, rv)
+  # weights[, "expl0"] <- 
   
   # Use gradient descent to improve sector-neutral linear weights
-  if (exp.cnt >= 24) {
+  if (exp.cnt >= 12) {
     # Use mean & cov of expert predictions as proxies for asset mean & cov
     var.cov <- cov(t(as.matrix(preds[, 2:(exp.cnt + 1)])))
     exp.ret <- rowMeans(preds[, 2:(exp.cnt + 1)])
-    wts.twk <- tweakWeightsGD(weights[, "expl0"], exp.ret, var.cov, npass = 20)
+    stds <- sqrt(diag(var.cov))
+    
+    # Winsorize exp.ret and stds
+    exp.ret <- pmax(exp.ret, quantile(exp.ret, 0.01))
+    exp.ret <- pmin(exp.ret, quantile(exp.ret, 0.99))
+    stds <- pmax(stds, quantile(stds, 0.01))
+    stds <- pmin(stds, quantile(stds, 0.99))
+    
+    
+    # Assume all correlations are the same
+    cors <- cor(t(as.matrix(preds[, 2:(exp.cnt + 1)])))
+    cors <- cors * 0.0 + mean(cors[upper.tri(cors)], na.rm = T)
+    diag(cors) <- 1
+    var.cov0 <- (stds %*% t(stds)) * cors
+    # Compute analytically the best portfolio assuming same correlations
+    inv0 <- solve(var.cov0)
+    evu <- sum(inv0 %*% exp.ret)
+    eve <- sum(inv0)
+    w0 <- inv0 %*% (exp.ret - evu/eve)
+    
+    if (sum(w0 * exp.ret) / sqrt(t(w0) %*% var.cov0 %*% w0) < 0) w0 <- (-w0)
+    if (abs(sum(w0))>1e-4) print("ERROR IN expertPortfolios: EXPL0 WEIGHTS DON'T SUM UP TO 1.")
+    w0 <- (w0 * (w0 > 0)) / sum(w0 * (w0 > 0)) - (w0 * (w0 < 0)) / sum(w0 * (w0 < 0))
+    weights[, "expl0"] <- w0
+    
+    # Tweak weights based on gradient descent
+    wts.twk <- tweakWeightsGD(weights[, "expl0"], exp.ret, var.cov, npass = 10)
     # Re-standardize long/short portfolio weights
     wts.twk <- (wts.twk * (wts.twk > 0)) / sum(wts.twk * (wts.twk > 0)) - 
                (wts.twk * (wts.twk < 0)) / sum(wts.twk * (wts.twk < 0))
     weights[, "expl"] <- wts.twk
+    
+    
   } else {
+    weights[, "expl0"] <- linearWeights(preds[, "exp"])
     weights[, "expl"] <- weights[, "expl0"]
   }
   

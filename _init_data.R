@@ -52,7 +52,6 @@ if(!exists("fr")) load("fr.RData")
 # # Process the ID variable: default = PERMNO
 # c1 <- as.data.frame(as.numeric(as.character(c0[,"PERMNO"])))
 # names(c1) <- P_IDN
-# rm(c0) # clean-up
 # # Capitalization
 # c1[,P_CPN] <- round( ifelse(c0$SHROUT>0,abs(c0$PRC)*c0$SHROUT,NA) )
 # # Price
@@ -71,50 +70,92 @@ if(!exists("fr")) load("fr.RData")
 # c1$dlret <- as.numeric(as.character(c0$DLRET))
 # # Fill in delisting returns, if return is na
 # c1$ret <- ifelse( !is.na(c1$ret0), c1$ret0, c1$dlret )
+# # 2-Digit SIC Code
+# c1[,P_SCN] <- as.numeric(c0$SICCD) %/% 100
+# c1[is.na(c1[,P_SCN]), P_SCN] <- (-1)
+# # Max/MIN Return
+# c1[, P_MXN] <- c0$ASKHI
+# c1[, P_MNN] <- c0$BIDLO
+# c1.last <- c1[, c(P_DXN, P_IDN, P_PRN)]
+# c1.last[, P_DXN] <- c1.last[, P_DXN] + 1
+# names(c1.last) <- c(P_DXN, P_IDN, "prc.l")
+# c1 <- merge(c1, c1.last, by=c(P_DXN, P_IDN), all.x = T)
+# c1[, P_MXN] <- pmax(abs(c1[, P_MXN])/abs(c1[, "prc.l"]), 0) - 1
+# c1[, P_MNN] <- pmax(abs(c1[, P_MNN])/abs(c1[, "prc.l"]), 0) - 1
+
 # # Merge with FF data to add in the "risk-free" rate
 # c2 <- merge(c1, ff[,c(P_DXN, "rf")], by=P_DXN, all.x=T)
-# rm(c1) # clean-up
 # # Set risk-free rate to zero for a few months in the beginning when it is not available.
 # c2$rf[is.na(c2$rf)] <- 0
 # # Set excess return as the default return variable
 # c2[,P_RTN] <- c2$ret - c2$rf
 # # Remove observations with NA returns and reorder the columns
-# c2 <- c2[!is.na(c2[,P_RTN]), c(P_DXN, P_IDN, P_RTN, P_CPN, P_PRN)]
+# c2 <- c2[!is.na(c2[,P_RTN]), c(P_DXN, P_IDN, P_RTN, P_CPN, P_PRN, P_MXN, P_MNN, P_SCN)]
 # 
 # # Save processed return data ----
 # c2 <- c2[order(c2[,P_DXN],c2[,P_IDN]),]
 # rownames(c2) <- NULL
 # save(c2,file="c2.RData")
+# rm(c0, c1, c1.last) # clean-up
 
 # # Read and process financial ratio data ----
 # fr0 <- read.csv(fin.ratio.path, header=T, stringsAsFactors=F) # EXTREMELY TIME-CONSUMING!!!
 # fr1 <- fr0[,c('permno',
 #               'public_date',
-#               'capital_ratio',
-#               'at_turn',
-#               'inv_turn',
-#               'pay_turn',
-#               'rect_turn',
-#               'sale_invcap',
-#               'ocf_lct',
-#               'cash_ratio',
-#               'curr_ratio',
-#               'accrual',
-#               'rd_sale',
-#               'gpm',
+#               'CAPEI',
+#               'bm',
+#               'evm',
+#               'pe_exi',
+#               'pe_inc',
+#               'ps',
+#               'pcf',
 #               'npm',
+#               'opmbd',
+#               'gpm',
+#               'ptpm',
+#               'cfm',
 #               'roa',
 #               'roe',
-#               'debt_assets',
-#               'intcov_ratio',
-#               'bm',
-#               'divyield',
-#               'pe_exi',
-#               'pcf')]
+#               'roce',
+#               'aftret_eq',
+#               'equity_invcap',
+#               'capital_ratio',
+#               'int_debt',
+#               'cash_lt',
+#               'invt_act',
+#               'rect_act',
+#               'debt_at',
+#               'short_debt',
+#               'lt_debt',
+#               'cash_debt',
+#               'lt_ppent',
+#               'intcov',
+#               'cash_ratio',
+#               'quick_ratio',
+#               'curr_ratio',
+#               'cash_conversion',
+#               'inv_turn',
+#               'at_turn',
+#               'rect_turn',
+#               'pay_turn',
+#               'sale_invcap',
+#               'rd_sale',
+#               'adv_sale',
+#               'staff_sale',
+#               'accrual')]
+fr1 <- fr0
+fr1$pe_op_dil <- NULL
+fr1$PEG_trailing <- NULL
+fr1$divyield <- NULL
+fr1$PEG_1yrforward <- NULL
+fr1$PEG_ltgforward <- NULL
+fr1$adate <- NULL
+fr1$qdate <- NULL
+# ratio.names <- names(fr1)[3:dim(fr1)[2]]
 # rm(fr0) # clean-up
 # fr1$year <- floor(fr1$public_date/10000)
 # fr1$month <- floor((fr1$public_date-fr1$year*10000)/100.0)
 # fr1[,P_DXN] <- toDex(fr1$year, fr1$month)
-# fr <- cbind(fr1[,c(P_DXN,P_IDN)], fr1[,3:23])
+# fr <- cbind(fr1[,c(P_DXN,P_IDN)], fr1[,ratio.names])
 # rm(fr1) # clean-up
 # save(fr,file="fr.RData")

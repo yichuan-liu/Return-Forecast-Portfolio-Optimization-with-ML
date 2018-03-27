@@ -38,7 +38,7 @@ resetTracker <- function(dbn, prefix="z_")
   #   None
   #
   dbn <- paste0(prefix,dbn)
-  if(!exists(dbn)) return()
+  # if(!exists(dbn, envir = globalenv())) return()
   assign(dbn, NULL, envir = globalenv())
 }
 

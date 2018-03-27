@@ -37,15 +37,21 @@ expertManage <- function(now, rdb = NULL, v = T) {
   # Get current performance data
   if(dim(expnf)[1] > 0 && sum(expnf$w) > 0) old.wts <- expnf$w / sum(expnf$w)
   else old.wts <- 0
+  # Set expert weights (NULL if current weights are not valid)
+  if(sum(old.wts) > 0) exp.wts <- old.wts
+  else exp.wts <- NULL
+  
+  # Decide which sets of predictors will be needed
+  sets <- 1
+  # if (now > min(fr[, P_DXN]) + 25) sets <- c(1, 2)
+  # else sets <- 1
+  
+  # Let the experts predict
+  preds <- expertRFPredict(now, sets = sets, rdb = rdb)
   
   # Compute L-S portfolio returns based on predicted values
-  if (sum(old.wts)>0) {
-    preds <- expertRFPredict(now, rdb = rdb)
-    pf.rets <- expertPortfolios(now, preds, exp.wts = old.wts, rdb = rdb)
-  } else {
-    preds <- expertRFPredict(now, rdb = rdb)
-    pf.rets <- expertPortfolios(now, preds, exp.wts = NULL, rdb = rdb)
-  }
+  pf.rets <- expertPortfolios(now, preds, exp.wts = exp.wts, rdb = rdb)
+  
   # Get the extra portfolio names
   ext.names <- names(pf.rets)[(length(expnf$eid) + 2):dim(pf.rets)[2]]
   

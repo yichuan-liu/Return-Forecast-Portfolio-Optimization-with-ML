@@ -11,7 +11,7 @@ expertAdd <- function(now, models) {
   # Compute the average of existing weights, next available expert ID
   # and next available position in the expert database
   if(exists("expdb", globalenv()) && exists("expnf", globalenv())) {
-    avg.wt <- mean(expnf[,"w"])
+    avg.wt <- 1 # mean(expnf[,"w"])
     nxt.id <- max(expnf[,"eid"])+1
     nxt.loc <- length(expdb)+1
   } else {

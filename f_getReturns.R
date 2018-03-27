@@ -1,8 +1,8 @@
 library(tidyr)
 
-getReturns <- function(dex, cum=T, ids=NULL, rdb=NULL, dxn=P_DXN, idn=P_IDN, rtn=P_RTN, gm=T)
+getReturns <- function(dex, cum=T, ids=NULL, rdb=NULL, dxn=P_DXN, idn=P_IDN, rtn=P_RTN, gm=T, fillna = NA)
 {
-  # Forms a panel of returns for the given ids/periods; optionally computes the cumulative returns
+  # Forms a panel of returns for the given ids/periods; optionally computes the cumulative averages
   #
   # Args:
   #   dex: list of time periods
@@ -11,8 +11,8 @@ getReturns <- function(dex, cum=T, ids=NULL, rdb=NULL, dxn=P_DXN, idn=P_IDN, rtn
   #   dxn: column name for dex (default = P_DXN)
   #   idn: column name for ids (default = P_IDN)
   #   rtn: column name for returns (default = P_RTN)
-  #   gm: geometric sum if true; arithmetic sum otherwise
-  #   parms: list of parameters (TODO)
+  #   gm: geometric mean if true; arithmetic mean otherwise (default = TRUE)
+  #   fillna: fill na cells; (default = NA: do not fill)
   #
   # Returns:
   #   Table containing ids and cumulative returns
@@ -28,6 +28,7 @@ getReturns <- function(dex, cum=T, ids=NULL, rdb=NULL, dxn=P_DXN, idn=P_IDN, rtn
   if(!is.null(ids)) ids <- ids[order(ids)]
   
   # Pre-slice the data
+  dur <- (max(dex) - min(dex) + 1)
   slc <- rdb[rdb[,dxn]>=min(dex) & rdb[,dxn]<=max(dex),c(dxn, idn, rtn)]
   rm(rdb)
   
@@ -35,12 +36,15 @@ getReturns <- function(dex, cum=T, ids=NULL, rdb=NULL, dxn=P_DXN, idn=P_IDN, rtn
   # out <- reshape(slc, idvar = idn, timevar = dxn, direction = "wide")
   out <- spread(slc, dxn, rtn)
   
+  # Fill NA observations (default: do not fill)
+  out[is.na(out)] <- fillna
+  
   # If cumulative return is requested
   if(cum && dim(out)[2]>2) {
     if(!gm) {
-      out[,"cret"] <- rowSums(out[,-1]) # Arithmetic sum
+      out[,"cret"] <- rowSums(out[,-1]) / dur # Arithmetic sum
     } else {
-      out[,"cret"] <- pmax( apply(out[,-1]+1, 1, prod), 0) - 1 # Geometric sum
+      out[,"cret"] <- pmax( apply(out[,-1]+1, 1, prod), 0) ^ (1 / dur) - 1 # Geometric sum
     }
     out <- out[!is.na(out[,"cret"]),c(idn, "cret")]
     return(out)

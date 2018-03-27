@@ -34,6 +34,7 @@ if (do.umd) resetTracker("umd")
 
 # L-S portfolio return tracker
 resetTracker("perf")
+resetTracker("imp")
 
 # Reset experts
 expertReset()
@@ -62,20 +63,28 @@ for (now in timeline) {
   noteBanner(paste(ym[1], "/" ,ym[2], "(", now, ")"))
   
   # Cache a smaller slice of returns for faster runtime
-  ret.slc <- c2[(c2[,P_DXN]>=now-12) & (c2[,P_DXN]<=now),]
+  ret.slc <- c2[(c2[,P_DXN]>=now-24) & (c2[,P_DXN]<=now),]
   
   # Manage existing experts
   note("main: managing existing experts...")
   expertManage(now, rdb = ret.slc)
   
   # Train and add new experts based on birth frequency P_EXPBR
-  if(now>=min.dex+12 && now %% P_EXPBR == 0) {
+  if(now >= min.dex + 12 && now %% P_EXPBR == 0) {
     note("main: training new experts...")
     # Train new experts
     new.models <- expertRFTrain(now, rdb = ret.slc, v = F)
     # Add new experts
     note("main: adding", length(new.models), "experts...")
     expertAdd(now, new.models)
+    
+    # Train experts of a different style
+    # if (now >= min.dex + 24) {
+    #   # cat("s2")
+    #   s2.new.models <- expertRFTrain(now, rdb = ret.slc, set = 2, v = F)
+    #   note("main: adding", length(s2.new.models), "SET 2 experts...")
+    #   expertAdd(now, s2.new.models)
+    # }
   }
   
   # Construct momentum portfolio and find returns
