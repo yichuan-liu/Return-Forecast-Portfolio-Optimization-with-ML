@@ -9,7 +9,7 @@ Main Features:
 - Performance: the long-short portfolio vastly outperforms portfolios based on traditional linear models and weighting schemes.
 
 Goals:
-- To show that machine-learning models outperform linear predictive models on the same inputs. (Check)
+- To show that machine-learning models outperform linear predictive models using the same inputs. (Check)
 - To show that machine-learning models can effeciently identify useful predictors from a pool of potential predictors. (Check)
 - To show that linear and sector-neutral weighting schemes can be matched and improved upon with primitive goal-seeking behavior. (Check)
 - To show that algorithm can generate useful predictors (with trial & error & learning) from a pool of raw data. (In progress)
