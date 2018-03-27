@@ -11,8 +11,8 @@ Main Features:
 Goals:
 - To show that machine-learning models outperform linear predictive models using the same inputs. (Check)
 - To show that machine-learning models can effeciently identify useful predictors from a pool of potential predictors. (Check)
-- To show that linear and sector-neutral weighting schemes can be matched and improved upon with primitive goal-seeking behavior. (Check)
-- To show that algorithm can generate useful predictors (with trial & error & learning) from a pool of raw data. (In progress)
+- To show that linear and sector-neutral weighting schemes can be "discovered" organically and improved upon with primitive goal-seeking behavior. (Check)
+- To show that algorithm can generate useful predictors (through trial & error & learning) from a pool of raw data. (In progress)
 - To create an unsupervised & self-learning program that can discover signals, optimize portfolio weights and evaluate performance. (Ultimately)
 
 Current model performance, with monthly portfolios containing ONLY the largest 1,000 US stocks:
